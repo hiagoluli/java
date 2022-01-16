@@ -12,7 +12,11 @@ import javax.persistence.ManyToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 public class usuarios implements UserDetails {
     
@@ -29,7 +33,7 @@ public class usuarios implements UserDetails {
             inverseJoinColumns = @JoinColumn(
             name="role_id", referencedColumnName="nomeRole"))
     private List<Role> roles;
-
+/*
     public int getId() {
         return this.id;
     }
@@ -70,7 +74,7 @@ public class usuarios implements UserDetails {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
-
+*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

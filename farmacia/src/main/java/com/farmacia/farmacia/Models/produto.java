@@ -2,13 +2,18 @@ package com.farmacia.farmacia.Models;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+@Getter
+@Setter
 @Entity
 public class produto implements Serializable {
 
@@ -17,6 +22,7 @@ public class produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //gera id automaticamente
     private int id;
+
     private String descricao;
     private double preco;
     private int quantidade;
@@ -26,7 +32,7 @@ public class produto implements Serializable {
     private double precoPromocional;
     private String imagem;
 
-
+/*
     public int getId() {
         return this.id;
     }
@@ -106,5 +112,5 @@ public class produto implements Serializable {
     public void setImagem(String imagem) {
         this.imagem = imagem;
     }
-
+*/
 }
