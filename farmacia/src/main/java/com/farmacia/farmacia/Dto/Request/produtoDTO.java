@@ -1,5 +1,5 @@
 package com.farmacia.farmacia.Dto.Request;
-
+/*
 import com.farmacia.farmacia.Models.produto;
 
 import lombok.AllArgsConstructor;
@@ -35,3 +35,4 @@ public class produtoDTO {
     }
     
 }
+*/

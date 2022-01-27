@@ -3,7 +3,9 @@ package com.farmacia.farmacia.Controllers;
 import java.util.List;
 import java.util.Optional;
 
-import com.farmacia.farmacia.Dto.Request.produtoDTO;
+import javax.servlet.http.HttpServletRequest;
+
+//import com.farmacia.farmacia.Dto.Request.produtoDTO;
 import com.farmacia.farmacia.Models.produto;
 import com.farmacia.farmacia.Repositories.ProdutoRepository;
 import com.farmacia.farmacia.Services.produtoService;
@@ -11,18 +13,23 @@ import com.farmacia.farmacia.Services.produtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.engine.AttributeName;
 
 import lombok.RequiredArgsConstructor;
-//import lombok.extern.log4j.Log4j2;
 
 @Controller
 //@RestController
@@ -32,59 +39,27 @@ import lombok.RequiredArgsConstructor;
 public class produtoController {
 
     @Autowired
-    private ProdutoRepository ps;
+    private produtoService ps;
 
-    //private final produtoService ps;
-/*
-    @RequestMapping("/")
-    public ResponseEntity<List<produto>> list() {
-        return ResponseEntity.ok(ps.listAll());
-    }
-*/
-    /*
-    @RequestMapping("/")
-    public ModelAndView listaProdutos(){
-        ModelAndView mv = new ModelAndView("index");
-        Iterable<produto> produtos = pr.findAll();
-        mv.addObject("produtos", produtos);
-        return mv;
-    }
-    */
-/*
-    @RequestMapping("/")
-    public ModelAndView listaProdutos(){
-        ModelAndView mv = new ModelAndView("index");
-        Iterable<produto> produtos = ps.listAll();
-        mv.addObject("produtos", produtos);
-        return mv;
-    }
-    */
-/*
-    @PostMapping
-    public produto getProduto(@RequestBody produtoDTO prodDto){
-        this.ps.findById(prodDto.build());
-        return produto;
-    }
-*/
-/*
-    @PostMapping(path="buscarProduto/{id}")
-    public ResponseEntity<produto> findById(@PathVariable long id) {
-        return null;
-        //return ResponseEntity<produto>.ok(produtoService listAll().get(0));
-    }
-*/
-    @GetMapping("/buscarProduto/{id}")
-    public ModelAndView mostrar(@PathVariable Long id) {
-        Optional<produto> optional = this.ps.findById(id);
 
-        if(optional.isPresent()){
-            produto produto = optional.get();
-            ModelAndView mv = new ModelAndView("redirect:/cadastrarProduto");
-            mv.addObject("produto", produto);
-            return mv;
-        }else {
-            return new ModelAndView("redirect:/index");
-        } 
+    @GetMapping(value = "/cadastrarProduto")
+    public String getProduto(Model model) {
+        model.addAttribute("produto", new produto());
+        return "cadastrarProduto";
     }
 
+    @GetMapping(value = "/buscarProduto")
+    public ModelAndView listandoPorId(@RequestParam("id") Long id, Model model) {
+        produto prod = ps.findById(id);
+        ModelAndView modelAndView = new ModelAndView("/cadastrarProduto");
+        modelAndView.addObject("produto", prod);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/cadastrarProduto/search", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> search(HttpServletRequest request) {
+		return ps.search(request.getParameter("term"));
+	}
+    
 }

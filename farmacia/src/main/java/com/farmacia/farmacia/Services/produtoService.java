@@ -1,6 +1,7 @@
 package com.farmacia.farmacia.Services;
 
 import java.util.List;
+
 import com.farmacia.farmacia.Models.produto;
 import com.farmacia.farmacia.Repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,11 @@ public class produtoService {
         return pr.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto não encontrado"));
     }
-    
+
+
+	public List<String> search(String keyword) {
+		return pr.search(keyword);
+	}
+
+
 }

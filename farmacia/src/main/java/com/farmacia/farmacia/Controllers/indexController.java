@@ -23,6 +23,7 @@ public class indexController {
         mv.addObject("produtos", produtos);
         return mv;
     }
+    
 /*
     @RequestMapping("/")
     public String index(){
