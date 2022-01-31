@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 //import com.farmacia.farmacia.Dto.Request.produtoDTO;
 import com.farmacia.farmacia.Models.produto;
@@ -55,11 +56,10 @@ public class produtoController {
         modelAndView.addObject("produto", prod);
         return modelAndView;
     }
-
+    
     @RequestMapping(value = "/cadastrarProduto/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> search(HttpServletRequest request) {
 		return ps.search(request.getParameter("term"));
 	}
-    
 }

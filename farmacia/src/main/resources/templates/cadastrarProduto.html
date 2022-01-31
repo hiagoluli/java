@@ -5,20 +5,100 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="${pageContext.request.contextPath }/resources/js/jquery-1.4.2.js"></script>
-        <script src="${pageContext.request.contextPath }/resources/js/jquery-ui-1.8.2.custom.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <!--<script src="${pageContext.request.contextPath }/resources/js/jquery-1.4.2.js"></script>-->
+        <!--<script src="${pageContext.request.contextPath }/resources/js/jquery-ui-1.8.2.custom.js"></script>-->
 
-        <link
-            href="${pageContext.request.contextPath }/resources/css/themes/base/jquery.ui.all.css"
-            rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script type="text/javascript">
+           /*
             $(document).ready(function() {
                 $('#descr').autocomplete({
-                    source : '${pageContext.request.contextPath }/cadastrarProduto/search'
-                });
-
-                
+                    source : '/cadastrarProduto/search'                              
+                });  
             });
+*/
+            $(document).ready(function() {
+                $('#descr').autocomplete({
+                   source : function(request, response) {
+                       response($.map("/cadastrarProduto/search", function (item){
+                           return {
+                               id: item.id,
+                               value: item.value
+                           }
+                       }))
+                   }, 
+                   select : function(event, ui) {
+                       //alert("teste");
+                       $(this).val(ui.item.value)
+                       $("#idprod").val(ui.item.id);
+                       //$("#descr").val(ui.produto.label);
+                       return false;
+                   }
+                });  
+            });   
+           
+           
+/*
+            $(document).ready(function() {
+                $('#descr').autocomplete({
+                   source : function(request, response) {
+                       $.ajax({
+                           url : "/cadastrarProduto/search/" + request.term,
+                           dataType : "json",
+                           data: {
+                               term : request.term
+                           },
+                           success : function(data){
+                               response($.map(data, function(produto){
+                                   return {
+                                       value : produto.id,
+                                       label : produto.descricao,                                                                     
+                                   };
+                               }));
+                           },
+                       });
+                   }, 
+                   select : function(event, ui) {
+                       alert("teste");
+                       //$("#descr").val(ui.produto.label);
+                       //var info = $("busca").html();
+                       //info = info.replace(/{id}/g,ui.produto.value);
+
+                       //$("#idprod").append(ui.produto.label);
+
+                       return false;
+                   }
+                });  
+            });   
+*/
+/*
+            $(document).ready(function() {
+                $(function() {
+                    $("#descr").autocomplete({
+                        source: function(request, response) {
+                            $.ajax({
+                                url: "/cadastrarProduto/search",
+                                type: "get",
+                                data: { term: request.term },
+
+                                dataType: "json",
+
+                                success: function(data) {
+                                    response($.map(data, function(v,i){
+                                        return {
+                                                    label: v.descricao,
+                                                    value: v.descricao
+                                        };
+                                    }));
+                                }
+                            });              
+                        }   
+                    });
+                });
+            });
+*/            
         </script>
     </head>
     <body>
@@ -33,10 +113,10 @@
                     </div>
                     <div class="row">
                         <div id="busca" class="col-12">
-                            <form action="#" method="get"
+                            <form id="busca" action="#" method="get"
                                 th:action="@{/buscarProduto}" th:object="${produto}">
                                 <div style="margin-left:10px; display:inline-block;" class="form-group col-2 mt-2">
-                                    <input type="text" id="id" class="form-control" placeholder="Codigo" th:field="*{id}"/>                                    
+                                    <input type="text" id="idprod" class="form-control" placeholder="Codigo" th:field="*{id}" th:value="${produto.id}"/>                                    
                                 </div>
                                 <div style="display:inline-block;" class="form-group col-6 mt-2">
                                     <input type="text" id="descr" name="descr" th:field="*{descricao}" class="form-control" placeholder="Descrição" th:value="${produto.descricao}">                                   

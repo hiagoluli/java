@@ -30,10 +30,15 @@ public class produtoService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto não encontrado"));
     }
 
-
+    
 	public List<String> search(String keyword) {
 		return pr.search(keyword);
 	}
+    
 
-
+/*
+    public List<produto> search(String keyword) {
+    return pr.search(keyword);
+    }
+*/
 }
