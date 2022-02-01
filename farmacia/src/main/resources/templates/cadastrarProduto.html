@@ -18,7 +18,57 @@
                     source : '/cadastrarProduto/search'                              
                 });  
             });
+            */
+
+
+            $(document).ready(function() {
+                $('#descr').autocomplete({
+                    source : '/cadastrarProduto/search',                      
+                    select: function(event,ui) {
+                        var keyword = ui.item.label;                                     
+                        var resultado = keyword.split(",");  
+                        var id = resultado[0];
+                        var descricao = resultado[1];
+                        document.getElementById("idprod").value = id;
+                        //document.getElementById("idprod").           
+                        document.getElementById("descr").innerHTML = descricao;
+                        getState(id);                                              
+                    }                           
+                });
+                
+                function getState(id) {
+                    $.get("/buscarProduto", {id : id});
+                    /*
+                    $.ajax({
+                        method: "get",
+                        url: "/buscarProduto",
+                        data: {id:id},
+                    });*/
+                }
+            });
+
+/*
+            $(document).ready(function() {
+                $('#descr').autocomplete({
+                    source: function(request, response){
+                        $.ajax({
+                            url: "/cadastrarProduto/search/",
+                            type: 'get',
+                            dataType: 'html',
+                            data: {
+                                'termo':request.term
+                            }
+                        }).DONE(function(data){
+                            if(data.length > 0){
+                                data = data.split(',');
+                                response($.each(data));
+                            }
+                        });
+                    }
+                });
+            });
 */
+/*
             $(document).ready(function() {
                 $('#descr').autocomplete({
                    source : function(request, response) {
@@ -38,7 +88,7 @@
                    }
                 });  
             });   
-           
+*/       
            
 /*
             $(document).ready(function() {
@@ -98,7 +148,7 @@
                     });
                 });
             });
-*/            
+    */       
         </script>
     </head>
     <body>
@@ -122,7 +172,6 @@
                                     <input type="text" id="descr" name="descr" th:field="*{descricao}" class="form-control" placeholder="Descrição" th:value="${produto.descricao}">                                   
                                 </div>
                                 <button style="display:inline-block;" type="submit" class="btn-block btn-primary btn-block col-2">Buscar</button>
-                                <a style="margin-left: 130px;" href="#">Buscar por descrição</a>
                             </form>
                         </div>
                     </div>
@@ -134,12 +183,12 @@
                                     <input style="display:inline-block;" type="text" th:value="${produto.descricao}" name="descricao" class="form-control" placeholder="Descrição do Produto">
                                 </div>
                                 
-                                <div style="margin-left: 10px;" class="form-group col-12 col-sm-6 col-md-8 col-lg-4 col-xl-4 mt-2">
+                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-6 col-md-8 col-lg-4 col-xl-4 mt-2">
                                     <label for="preco">Preço:</label>
                                     <input type="number" step="0.01" th:value="${produto.preco}" name="preco" class="form-control" placeholder="Preço">
                                 </div>
                                
-                                <div style="margin-left: 10px;" class="form-group col-12 col-sm-6 col-md-8 col-lg-4 col-xl-4 mt-2">
+                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-6 col-md-8 col-lg-4 col-xl-4 mt-2">
                                     <label for="quantidade">Quantidade:</label>
                                     <input type="number" th:value="${produto.quantidade}" name="quantidade" class="form-control" placeholder="Quantidade">
                                 </div>
@@ -155,14 +204,17 @@
                                     </select>
                                 </div>
                                 
-                                <div id="formGenerico" class="form-group col-11 col-sm-11 col-md-11 col-lg-4 col-xl-4 mt-3">
+                                <div id="formGenerico" class="form-group col-4 col-sm-11 col-md-11 col-lg-4 col-xl-4 mt-3">
                                     <h5>Genérico</h5>
                                     <input type="radio" th:checked="${produto.generico} == true" id="sim" name="generico">
                                     <label for="generico">sim</label>
                                     <input type="radio" id="nao" name="generico" th:checked="${produto.generico} == false">
                                     <label for="generico">não</label>
                                 </div>
-                                
+
+                                <div class="">
+                                    <img th:src="'../assets/' + ${produto.imagem}" alt="" class="img-fluid img-thumbnail">
+                                </div>
                                 <div style="margin-left: 10px;" class="form-group ml-3 mt-3">
                                     <input onclick="liberarOpcao()" type="radio" id="liberar" name="promocao" th:checked="${produto.promocao} == true">
                                     <label for="promocao">Promoção</label>                                   
@@ -172,9 +224,9 @@
                                     <input id="pricePromo" type="number" step="0.01" th:value="${produto.precoPromocional}" name="precoPromocional" class="form-control" placeholder="Preço Promocional" disabled>
                                 </div>
                                 </br>
-                                <div style="margin-left: 10px;" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10">
+                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-12 col-md-12 col-lg-12 col-xl-10">
                                     Imagem do Produto<br>
-                                    <input type="file" name="imagem" id="imagem" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>
+                                    <input type="file" name="imagem" id="imagem" th:value="${produto.imagem}" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>
                                     <br></br>
                                 </div>
                                 

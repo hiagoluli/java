@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transaction;
 
 //import com.farmacia.farmacia.Dto.Request.produtoDTO;
 import com.farmacia.farmacia.Models.produto;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.engine.AttributeName;
+import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,10 +58,22 @@ public class produtoController {
         modelAndView.addObject("produto", prod);
         return modelAndView;
     }
-    
+/*
     @RequestMapping(value = "/cadastrarProduto/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> search(HttpServletRequest request) {
 		return ps.search(request.getParameter("term"));
 	}
+*/
+    @RequestMapping(value = "/cadastrarProduto/search", method = RequestMethod.GET)
+	@ResponseBody
+	public String search(HttpServletRequest request) {
+        String keyword = request.getParameter("term");       
+        Gson gson = new Gson();
+        return gson.toJson(ps.search(keyword));
+	}
+
+    
+
+
 }
