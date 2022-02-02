@@ -1,5 +1,6 @@
 package com.farmacia.farmacia.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,12 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transaction;
 
+import com.farmacia.farmacia.Dto.LabelValueDTO;
 //import com.farmacia.farmacia.Dto.Request.produtoDTO;
 import com.farmacia.farmacia.Models.produto;
 import com.farmacia.farmacia.Repositories.ProdutoRepository;
 import com.farmacia.farmacia.Services.produtoService;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.KPropertyPathExtensionsKt;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,20 +35,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.engine.AttributeName;
+import org.thymeleaf.standard.expression.Each;
+
 import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
-//@RestController
-//@RequestMapping("/buscarProduto")
-//@Log4j2
 @RequiredArgsConstructor
 public class produtoController {
 
     @Autowired
     private produtoService ps;
 
+    private List<produto> produtos;
 
     @GetMapping(value = "/cadastrarProduto")
     public String getProduto(Model model) {
@@ -58,22 +63,25 @@ public class produtoController {
         modelAndView.addObject("produto", prod);
         return modelAndView;
     }
-/*
-    @RequestMapping(value = "/cadastrarProduto/search", method = RequestMethod.GET)
-	@ResponseBody
-	public List<String> search(HttpServletRequest request) {
-		return ps.search(request.getParameter("term"));
-	}
-*/
-    @RequestMapping(value = "/cadastrarProduto/search", method = RequestMethod.GET)
-	@ResponseBody
-	public String search(HttpServletRequest request) {
-        String keyword = request.getParameter("term");       
-        Gson gson = new Gson();
-        return gson.toJson(ps.search(keyword));
-	}
-
     
-
+    @GetMapping("/cadastrarProduto/search")
+    @ResponseBody
+    public List<LabelValueDTO> buscaPorDescricao(HttpServletRequest request) {
+        produtos = ps.listAll();
+        String keyword = request.getParameter("term");
+        List<LabelValueDTO> suggestions = new ArrayList<LabelValueDTO>();       
+        
+        for(produto prod : produtos){
+            if(prod.toString().matches("(?i).*" + keyword + ".*")){
+                LabelValueDTO lv = new LabelValueDTO();
+                lv.setLabel(prod.getDescricao());
+                //lv.setLabel(prod.toString());
+                lv.setValue(Long.toString(prod.getId()));
+                suggestions.add(lv);               
+            }
+        }
+        
+        return suggestions;
+    }
 
 }

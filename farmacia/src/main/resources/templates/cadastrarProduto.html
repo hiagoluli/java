@@ -3,158 +3,32 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/cadastrarProduto.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <!--<script src="${pageContext.request.contextPath }/resources/js/jquery-1.4.2.js"></script>-->
-        <!--<script src="${pageContext.request.contextPath }/resources/js/jquery-ui-1.8.2.custom.js"></script>-->
 
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script type="text/javascript">
-           /*
-            $(document).ready(function() {
-                $('#descr').autocomplete({
-                    source : '/cadastrarProduto/search'                              
-                });  
-            });
-            */
-
-
-            $(document).ready(function() {
-                $('#descr').autocomplete({
-                    source : '/cadastrarProduto/search',                      
-                    select: function(event,ui) {
-                        var keyword = ui.item.label;                                     
-                        var resultado = keyword.split(",");  
-                        var id = resultado[0];
-                        var descricao = resultado[1];
-                        document.getElementById("idprod").value = id;
-                        //document.getElementById("idprod").           
-                        document.getElementById("descr").innerHTML = descricao;
-                        getState(id);                                              
-                    }                           
-                });
-                
-                function getState(id) {
-                    $.get("/buscarProduto", {id : id});
-                    /*
-                    $.ajax({
-                        method: "get",
-                        url: "/buscarProduto",
-                        data: {id:id},
-                    });*/
-                }
-            });
-
-/*
-            $(document).ready(function() {
-                $('#descr').autocomplete({
-                    source: function(request, response){
-                        $.ajax({
-                            url: "/cadastrarProduto/search/",
-                            type: 'get',
-                            dataType: 'html',
-                            data: {
-                                'termo':request.term
-                            }
-                        }).DONE(function(data){
-                            if(data.length > 0){
-                                data = data.split(',');
-                                response($.each(data));
-                            }
-                        });
+            $(function(){
+                $("#descr").autocomplete({
+                    source: "/cadastrarProduto/search",
+                    delay: 500,
+                    select: function(event, ui){
+                        var keyword = ui.item.label; 
+                        var ide = ui.item.value;                     
+                        $("#idprod").val(ui.item.value);
+                        $("#descr").val(ui.item.label);
+                        return false;
                     }
-                });
-            });
-*/
-/*
-            $(document).ready(function() {
-                $('#descr').autocomplete({
-                   source : function(request, response) {
-                       response($.map("/cadastrarProduto/search", function (item){
-                           return {
-                               id: item.id,
-                               value: item.value
-                           }
-                       }))
-                   }, 
-                   select : function(event, ui) {
-                       //alert("teste");
-                       $(this).val(ui.item.value)
-                       $("#idprod").val(ui.item.id);
-                       //$("#descr").val(ui.produto.label);
-                       return false;
-                   }
-                });  
-            });   
-*/       
-           
-/*
-            $(document).ready(function() {
-                $('#descr').autocomplete({
-                   source : function(request, response) {
-                       $.ajax({
-                           url : "/cadastrarProduto/search/" + request.term,
-                           dataType : "json",
-                           data: {
-                               term : request.term
-                           },
-                           success : function(data){
-                               response($.map(data, function(produto){
-                                   return {
-                                       value : produto.id,
-                                       label : produto.descricao,                                                                     
-                                   };
-                               }));
-                           },
-                       });
-                   }, 
-                   select : function(event, ui) {
-                       alert("teste");
-                       //$("#descr").val(ui.produto.label);
-                       //var info = $("busca").html();
-                       //info = info.replace(/{id}/g,ui.produto.value);
-
-                       //$("#idprod").append(ui.produto.label);
-
-                       return false;
-                   }
-                });  
-            });   
-*/
-/*
-            $(document).ready(function() {
-                $(function() {
-                    $("#descr").autocomplete({
-                        source: function(request, response) {
-                            $.ajax({
-                                url: "/cadastrarProduto/search",
-                                type: "get",
-                                data: { term: request.term },
-
-                                dataType: "json",
-
-                                success: function(data) {
-                                    response($.map(data, function(v,i){
-                                        return {
-                                                    label: v.descricao,
-                                                    value: v.descricao
-                                        };
-                                    }));
-                                }
-                            });              
-                        }   
-                    });
-                });
-            });
-    */       
+                })
+            })
         </script>
     </head>
     <body>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <div class="container">
-            <div id="cadastrar" class="form-group justify-content-center mt-2 col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div id="cadastrar" class="form-group justify-content-center mt-2 col-12 col-sm-12 col-md-8 col-lg-8 col-xl-5">
                 <div class="card-body">
                     <div class="row">
                         <div class="text-sm-12">
@@ -178,7 +52,7 @@
                     <div class="row">
                         <div id="formulario" class="col-12">
                             <form action="/registrarProduto" method="post" enctype="multipart/form-data">
-                                <div style="margin-left: 10px;" class="form-group col-8 mt-2">
+                                <div style="margin-left: 10px;" class="form-group col-10 mt-2">
                                     <label for="descricao">Descrição:</label>
                                     <input style="display:inline-block;" type="text" th:value="${produto.descricao}" name="descricao" class="form-control" placeholder="Descrição do Produto">
                                 </div>
@@ -192,7 +66,9 @@
                                     <label for="quantidade">Quantidade:</label>
                                     <input type="number" th:value="${produto.quantidade}" name="quantidade" class="form-control" placeholder="Quantidade">
                                 </div>
-                                
+
+
+                                <div style="display: inline-block;" class="col-7 col-sm-7 col-md-7 col-lg-6 col-xl-6 mt-3">
                                 <div class="form-group mt-3">
                                     <label id="formCategoria" for="categoria">Categoria:</label>
                                     <select name="categoria" id="categoria">
@@ -204,7 +80,7 @@
                                     </select>
                                 </div>
                                 
-                                <div id="formGenerico" class="form-group col-4 col-sm-11 col-md-11 col-lg-4 col-xl-4 mt-3">
+                                <div id="formGenerico" class="form-group col-6 col-sm-5 col-md-6 col-lg-5 col-xl-6 mt-3">
                                     <h5>Genérico</h5>
                                     <input type="radio" th:checked="${produto.generico} == true" id="sim" name="generico">
                                     <label for="generico">sim</label>
@@ -212,19 +88,23 @@
                                     <label for="generico">não</label>
                                 </div>
 
-                                <div class="">
-                                    <img th:src="'../assets/' + ${produto.imagem}" alt="" class="img-fluid img-thumbnail">
-                                </div>
+                                
                                 <div style="margin-left: 10px;" class="form-group ml-3 mt-3">
                                     <input onclick="liberarOpcao()" type="radio" id="liberar" name="promocao" th:checked="${produto.promocao} == true">
                                     <label for="promocao">Promoção</label>                                   
-                                </div>
-                                
-                                <div style="margin-left: 10px;" id="precoPromocional" class="form-group col-4 mt-1">
+                                </div>                          
+
+                                <div style="margin-left: 10px;" id="precoPromocional" class="form-group col-8 mt-1">
                                     <input id="pricePromo" type="number" step="0.01" th:value="${produto.precoPromocional}" name="precoPromocional" class="form-control" placeholder="Preço Promocional" disabled>
                                 </div>
+                                </div>
+                                <div id="imagemProduto" class="" style="display: inline-block;">
+                                    <img th:src="'../assets/' + ${produto.imagem}" alt="" class="img-fluid img-thumbnail">
+                                </div>
+
+
                                 </br>
-                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-12 col-md-12 col-lg-12 col-xl-10">
+                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-11 col-md-11 col-lg-11 col-xl-10">
                                     Imagem do Produto<br>
                                     <input type="file" name="imagem" id="imagem" th:value="${produto.imagem}" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>
                                     <br></br>

@@ -1,0 +1,50 @@
+#cadastrar {
+    border: solid gray 2px;
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  #formulario {
+    padding: 0;
+    margin: 0;
+    border: solid gray 1px;
+    border-radius: 5px;
+    background-color: #fff
+    
+  }
+
+  #formulario input {
+    background-color: #fff;
+  }
+
+  #formGenerico {
+    border: solid 1px;
+    border-radius: 5px;
+    margin-left: 15px;
+    padding-left: 10px;
+  }
+
+  #nao {
+    margin-left: 10px;
+  }
+
+  #precoPromocional {
+    margin-top: -20px;
+  }
+
+  #categoria {
+    margin-left: 5px;
+  }
+
+  #formCategoria {
+    margin-left: 15px;
+  }
+
+  #imagemProduto {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    margin-top: 20px;
+    border: none;
+  }

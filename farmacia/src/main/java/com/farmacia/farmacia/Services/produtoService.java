@@ -1,6 +1,9 @@
 package com.farmacia.farmacia.Services;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import com.farmacia.farmacia.Models.produto;
 import com.farmacia.farmacia.Repositories.ProdutoRepository;
@@ -15,30 +18,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class produtoService {
 
-    //@Autowired
-    //private ProdutoRepository pr;
-
-    private final ProdutoRepository pr;
+    @Autowired
+    private ProdutoRepository pr;
     
     public List<produto> listAll() {
         return pr.findAll();
     }
-
     
     public produto findById(long id) {
         return pr.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto não encontrado"));
     }
 
-    
-	public List<String> search(String keyword) {
-		return pr.search(keyword);
-	}
-    
-
-/*
-    public List<produto> search(String keyword) {
-    return pr.search(keyword);
+    public List<produto> buscaPorDescricao(String keyword) {
+        return pr.buscaPorDescricao(keyword);
     }
-*/
+
 }
