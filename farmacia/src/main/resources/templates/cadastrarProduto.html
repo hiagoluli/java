@@ -6,10 +6,11 @@
         <link rel="stylesheet" type="text/css" href="css/cadastrarProduto.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
+        <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>  
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script type="text/javascript">
+
             $(function(){
                 $("#descr").autocomplete({
                     source: "/cadastrarProduto/search",
@@ -23,6 +24,25 @@
                     }
                 })
             })
+
+            $('.valorEmReais').mask('000.000,00', {reverse: true});
+
+            function mudarFormatoDecimal(){
+                $('.valorEmReais').mask('000,000.00', {reverse: true});
+            }
+
+            function enviar(endereco){
+                if(endereco == "cadastrar"){
+                    document.forms[1].action = "/registrarProduto";
+                    document.forms[1].submit();
+                }
+                if(endereco == "excluir"){
+                    if(confirm("Confirmar exclusão?") == true){
+                        document.forms[1].action = "/excluirProduto";
+                        document.forms[1].submit();
+                    }                    
+                } 
+            }
         </script>
     </head>
     <body>
@@ -40,7 +60,7 @@
                             <form id="busca" action="#" method="get"
                                 th:action="@{/buscarProduto}" th:object="${produto}">
                                 <div style="margin-left:10px; display:inline-block;" class="form-group col-2 mt-2">
-                                    <input type="text" id="idprod" class="form-control" placeholder="Codigo" th:field="*{id}" th:value="${produto.id}"/>                                    
+                                    <input type="text" id="idprod" class="form-control" placeholder="Codigo" th:field="*{id}" th:value="${produto.id} == 0"/>                                    
                                 </div>
                                 <div style="display:inline-block;" class="form-group col-6 mt-2">
                                     <input type="text" id="descr" name="descr" th:field="*{descricao}" class="form-control" placeholder="Descrição" th:value="${produto.descricao}">                                   
@@ -51,68 +71,70 @@
                     </div>
                     <div class="row">
                         <div id="formulario" class="col-12">
-                            <form action="/registrarProduto" method="post" enctype="multipart/form-data">
+                            <form method="post" enctype="multipart/form-data"  onsubmit="mudarFormatoDecimal()">
                                 <div style="margin-left: 10px;" class="form-group col-10 mt-2">
                                     <label for="descricao">Descrição:</label>
-                                    <input style="display:inline-block;" type="text" th:value="${produto.descricao}" name="descricao" class="form-control" placeholder="Descrição do Produto">
+                                    <input type="hidden" id="id" th:field="*{produto.id}" th:value="${produto.id}"></hidden>
+                                    <input style="display:inline-block;" type="text" required th:value="${produto.descricao}" th:field="*{produto.descricao}" name="descricao" class="form-control">
                                 </div>
                                 
                                 <div style="margin-left: 10px;" class="form-group col-11 col-sm-6 col-md-8 col-lg-4 col-xl-4 mt-2">
                                     <label for="preco">Preço:</label>
-                                    <input type="number" step="0.01" th:value="${produto.preco}" name="preco" class="form-control" placeholder="Preço">
+                                    <input type="text" required th:value="${produto.preco}" th:field="*{produto.preco}" name="valorEmReais" class="valorEmReais form-control">
                                 </div>
                                
                                 <div style="margin-left: 10px;" class="form-group col-11 col-sm-6 col-md-8 col-lg-4 col-xl-4 mt-2">
                                     <label for="quantidade">Quantidade:</label>
-                                    <input type="number" th:value="${produto.quantidade}" name="quantidade" class="form-control" placeholder="Quantidade">
+                                    <input type="number" required th:value="${produto.quantidade}" th:field="*{produto.quantidade}" name="quantidade" class="form-control">
                                 </div>
 
-
-                                <div style="display: inline-block;" class="col-7 col-sm-7 col-md-7 col-lg-6 col-xl-6 mt-3">
+                                <div style="display: inline-block;" class="col-7 col-sm-7 col-md-7 col-lg-6 col-xl-6 mt-1">
                                 <div class="form-group mt-3">
                                     <label id="formCategoria" for="categoria">Categoria:</label>
-                                    <select name="categoria" id="categoria">
-                                        <option value=''>Medicamentos</option>
-                                        <option value=''>Cosméticos</option>
-                                        <option value=''>Higíene</option>
-                                        <option value=''>Saúde</option>
-                                        <option value=''>Infantil</option>
+                                    <select name="categoria" id="categoria" th:field="*{produto.categoria}">
+                                        <option value='Medicamentos'>Medicamentos</option>
+                                        <option value='Cosmeticos'>Cosméticos</option>
+                                        <option value='Higiene'>Higíene</option>
+                                        <option value='Saude'>Saúde</option>
+                                        <option value='Infantil'>Infantil</option>
                                     </select>
                                 </div>
                                 
                                 <div id="formGenerico" class="form-group col-6 col-sm-5 col-md-6 col-lg-5 col-xl-6 mt-3">
                                     <h5>Genérico</h5>
-                                    <input type="radio" th:checked="${produto.generico} == true" id="sim" name="generico">
+                                    <input type="radio" th:checked="${produto.generico} == true" id="simGenerico" name="generico" value="yes">
                                     <label for="generico">sim</label>
-                                    <input type="radio" id="nao" name="generico" th:checked="${produto.generico} == false">
+                                    <input type="radio" id="naoGenerico" name="generico" th:checked="${produto.generico} == false" value="no">
                                     <label for="generico">não</label>
                                 </div>
 
                                 
-                                <div style="margin-left: 10px;" class="form-group ml-3 mt-3">
-                                    <input onclick="liberarOpcao()" type="radio" id="liberar" name="promocao" th:checked="${produto.promocao} == true">
-                                    <label for="promocao">Promoção</label>                                   
-                                </div>                          
+                                <div id="formGenerico" style="margin-left: 10px;" class="form-group col-6 col-sm-5 col-md-6 col-lg-5 col-xl-7 mt-3">
+                                    <h5>Promoção</h5>
+                                    <input type="radio" id="simPromocao" name="promocao" th:checked="${produto.promocao} == true">
+                                    <label for="promocao">sim</label> 
+                                    <input style="margin-left: 20px;" type="radio" id="naoPromocao" name="promocao" th:checked="${produto.promocao} == false">
+                                    <label for="promocao">não</label>                                 
+                                                          
 
-                                <div style="margin-left: 10px;" id="precoPromocional" class="form-group col-8 mt-1">
-                                    <input id="pricePromo" type="number" step="0.01" th:value="${produto.precoPromocional}" name="precoPromocional" class="form-control" placeholder="Preço Promocional" disabled>
+                                <div style="margin-left: 10px;" id="precoPromocional" class="form-group col-8 col-xl-10 mt-1 mb-1">
+                                    <input id="pricePromo" type="text" th:value="${produto.precoPromocional}" th:field="*{produto.precoPromocional}" name="precoPromocional" class="valorEmReais form-control">
                                 </div>
                                 </div>
-                                <div id="imagemProduto" class="" style="display: inline-block;">
+                                </div>
+                                <div id="imagemProduto" style="display: inline-block;">
                                     <img th:src="'../assets/' + ${produto.imagem}" alt="" class="img-fluid img-thumbnail">
+                                    <small class="form-text" th:text="${produto.imagem}"></small>
                                 </div>
 
-
-                                </br>
-                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-11 col-md-11 col-lg-11 col-xl-10">
+                                <div style="margin-left: 10px;" class="form-group col-11 col-sm-11 col-md-11 col-lg-11 col-xl-10 mt-2">
                                     Imagem do Produto<br>
-                                    <input type="file" name="imagem" id="imagem" th:value="${produto.imagem}" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>
-                                    <br></br>
+                                    <!--<input type="file" name="imagem" id="imagem" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>-->          
                                 </div>
-                                
-                                <button style="margin-left:50px;" type="submit" class="btn btn-primary btn-block col-10">Cadastrar</button>
-
-                                        <!--<small class="form-text text-danger">Erro ao tentar realizar o cadastro!</small>-->
+                                </br>
+                                <input  name="addOrEdit" value="Cadastrar" onclick="enviar('cadastrar')" style="margin-left:50px;display: inline-block;" class="btn btn-primary btn-block col-4">
+                                <input  name="delete" value="Excluir" onclick="enviar('excluir')" style="margin-left:50px;display: inline-block;" class="btn btn-danger btn-block col-4">
+                                    <!--<small class="form-text text-danger">Erro ao tentar realizar o cadastro!</small>-->
                             </form>
                         </div>
                     </div>

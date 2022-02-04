@@ -34,4 +34,12 @@ public class produtoService {
         return pr.buscaPorDescricao(keyword);
     }
 
+    public produto salvarProduto(produto prod){
+        return pr.save(prod);
+    }
+
+    public void excluirProduto(Long id){
+        pr.deleteById(id);
+    }
+
 }

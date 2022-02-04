@@ -3,6 +3,7 @@ package com.farmacia.farmacia.Controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.ToDoubleFunction;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,16 +51,27 @@ public class produtoController {
     private produtoService ps;
 
     private List<produto> produtos;
-
+/*
     @GetMapping(value = "/cadastrarProduto")
     public String getProduto(Model model) {
         model.addAttribute("produto", new produto());
         return "cadastrarProduto";
     }
+*/
+    @GetMapping(value = "/cadastrarProduto")
+    public ModelAndView getProduto(Model model){
+        ModelAndView mv = new ModelAndView("cadastrarProduto");
+        model.addAttribute("produto", new produto());
+        mv.addObject("produto");
+        return mv;
+    }
 
     @GetMapping(value = "/buscarProduto")
     public ModelAndView listandoPorId(@RequestParam("id") Long id, Model model) {
         produto prod = ps.findById(id);
+        if(prod == null){
+            
+        }
         ModelAndView modelAndView = new ModelAndView("/cadastrarProduto");
         modelAndView.addObject("produto", prod);
         return modelAndView;
@@ -83,5 +96,35 @@ public class produtoController {
         
         return suggestions;
     }
+
+    @PostMapping("/registrarProduto")
+    @ResponseBody
+    public ModelAndView salvarProduto(produto prod){
+        if(prod.getImagem() == null){
+            prod.setImagem("generico.png");
+        }
+        ModelAndView mv = new ModelAndView("cadastrarProduto");
+        ps.salvarProduto(prod);
+        return mv;
+    }
+/*
+    @PostMapping("/excluirProduto")
+    @ResponseBody
+    public String excluirProduto(@RequestParam("id") Long id, Model model){
+        ps.excluirProduto(id);
+        return "redirect:/cadastrarProduto";
+    }
+*/
+
+    @PostMapping("/excluirProduto")
+    @ResponseBody
+    public ModelAndView excluirProduto(@RequestParam("id") Long id, Model model){
+        ModelAndView mv = new ModelAndView("cadastrarProduto");
+        model.addAttribute("produto", new produto());
+        mv.addObject("produto");
+        ps.excluirProduto(id);
+        return mv;
+    }
+
 
 }
