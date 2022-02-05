@@ -31,8 +31,16 @@
                 $('.valorEmReais').mask('000,000.00', {reverse: true});
             }
 
+
+            function tratarImagem(){
+                var caminho = document.getElementById("imagem").value;             
+	            var arquivo = caminho.substring(caminho.lastIndexOf('\\') + 1);              
+                document.getElementById("imagem").value = arquivo;
+            }
+
             function enviar(endereco){
                 if(endereco == "cadastrar"){
+                    mudarFormatoDecimal();                 
                     document.forms[1].action = "/registrarProduto";
                     document.forms[1].submit();
                 }
@@ -43,6 +51,14 @@
                     }                    
                 } 
             }
+        </script>
+
+        <script th:inline="javascript">
+            function tratarImagem(){
+                var caminho = document.getElementById("inputImagem").value;             
+	            var arquivo = caminho.substring(caminho.lastIndexOf('\\') + 1);
+                document.getElementById("imagem").value = arquivo;         
+            }         
         </script>
     </head>
     <body>
@@ -129,7 +145,8 @@
 
                                 <div style="margin-left: 10px;" class="form-group col-11 col-sm-11 col-md-11 col-lg-11 col-xl-10 mt-2">
                                     Imagem do Produto<br>
-                                    <!--<input type="file" name="imagem" id="imagem" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>-->          
+                                    <input type="file" name="inputImagem" id="inputImagem" onchange="tratarImagem()" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"/>          
+                                    <input type="hidden" id="imagem" th:field="${produto.imagem}"></hidden>
                                 </div>
                                 </br>
                                 <input  name="addOrEdit" value="Cadastrar" onclick="enviar('cadastrar')" style="margin-left:50px;display: inline-block;" class="btn btn-primary btn-block col-4">

@@ -10,6 +10,8 @@ import com.farmacia.farmacia.Repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,10 @@ public class produtoService {
     
     public List<produto> listAll() {
         return pr.findAll();
+    }
+
+    public List<produto> listAllByCategory(String categoria) {
+        return pr.buscaPorCategoria(categoria);
     }
     
     public produto findById(long id) {
@@ -40,6 +46,14 @@ public class produtoService {
 
     public void excluirProduto(Long id){
         pr.deleteById(id);
+    }
+
+    public class ResourceNotFoundException extends RuntimeException { }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleResourceNotFoundException() {
+        return "/cadastrarProduto";
     }
 
 }

@@ -79,6 +79,7 @@
     #produto:hover {
       border-radius: 6px;
       border: solid 1px;
+      border-color: transparent;
     }
   
     
@@ -408,6 +409,7 @@
     #redesSociais i {
       padding-left: 15px;
     }
+    
   /*
     #total {
       margin-top: 20px;

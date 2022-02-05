@@ -16,5 +16,8 @@ public interface ProdutoRepository extends JpaRepository<produto, Long> {
    
     @Query("SELECT id, descricao FROM produto where descricao like %:keyword%")
     public List<produto> buscaPorDescricao(@Param("keyword") String keyword);
+
+    @Query("SELECT p FROM produto p where p.categoria like %:categoria%")
+    public List<produto> buscaPorCategoria(@Param("categoria") String categoria);
     
 }
