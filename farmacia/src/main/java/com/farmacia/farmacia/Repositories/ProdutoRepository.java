@@ -1,7 +1,6 @@
 package com.farmacia.farmacia.Repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.farmacia.farmacia.Models.produto;
 
@@ -20,8 +19,8 @@ public interface ProdutoRepository extends PagingAndSortingRepository<produto, L
     @Query("SELECT id, descricao FROM produto where descricao like %:keyword%")
     public List<produto> buscaPorDescricao(@Param("keyword") String keyword);
 
-    @Query("SELECT p FROM produto p where p.categoria like %:categoria%")
-    public List<produto> buscaPorCategoria(@Param("categoria") String categoria);
+    @Query("SELECT p FROM produto p where p.categoria = ?1")
+    public Page<produto> findAllByCategoria(String sortField, Pageable pageable);
 
     
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,21 +22,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class produtoService {
 
-    public static final int PRODUTOS_POR_PAGINA = 12;
-
     @Autowired
     private ProdutoRepository pr;
     
-    public Page<produto> listAll(int pageNumber, String sortField, String sortDir) {
-        Sort sort = Sort.by("descricao");
-        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNumber - 1, 6, sort);
-        return pr.findAll(pageable);
+    public Page<produto> listAllByCategory(int pageNumber, String sortField) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 12);
+        return pr.findAllByCategoria(sortField, pageable);
     }
 
-    public List<produto> listAllByCategory(String categoria) {
-        return pr.buscaPorCategoria(categoria);
+    public List<produto> listAll() {
+        return (List<produto>) pr.findAll();
     }
     
     public produto findById(long id) {
