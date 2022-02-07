@@ -24,7 +24,7 @@
     <meta name="theme-color" content="#ffffff">
 
     <script>
-        $('.valorEmReais').mask('#.###,##', {reverse: true});       
+        $('.valorEmReais').mask('#.###,##', {reverse: true});      
     </script>
 
   </head>
@@ -131,33 +131,73 @@
                 </div>
                 <div class="mt-1 col-12 col-md-7">
                     <div class="d-flex flex-row-reverse justify-content-center justify-content-md-start">
-                        <form class="ml-3 d-inline-block">
-                            <select style="height:31px;" class="form-select form-select-sm">
-                              <option selected>Ordenar pelo nome</option>
-                              <option value="1">Ordenar pelo nome</option>
-                              <option value="2">Ordenar pelo menor preco</option>
-                              <option value="3">Ordenar pelo maior preço</option>
-                            </select>
-                        </form>
-                        <nav class="d-inline-block">
-                            <ul class="pagination pagination-sm my-0">
-                                <li class="page-item">
-                                    <button type="button" class="page-link">1</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">2</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">3</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">4</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">5</button>
-                                </li>
-                            </ul>
-                        </nav>
+                        
+                        <form class="ml-3 d-inline-block">                           
+                            <!--<a th:href="@{'/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir}}">Ordenar</a>-->
+                            <!--
+                            <select style="height:31px;" id="ordenar" th:onchange="|window.location.href='/cadastrarProduto'" class="form-select form-select-sm">                            
+                              <option value="1" selected>Ordenar por menor preco</option>
+                              <option value="2">Ordenar por maior preço</option>
+                            </select>  
+                            -->   
+                        </form>                  
+                            <div>      
+                                <nav class="d-inline-block">
+                                    <ul class="pagination pagination-sm my-0">
+                                        <li class="page-item">
+                                            <a class="page-link" th:if="${currentPage > 1}" th:href="@{'/page/' + ${1}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">Primeira</a>
+                                            <span class="page-link" th:unless="${currentPage > 1}">Primeira</span>
+                                        </li>   
+                                        <!--
+                                        <li class="page-item">
+                                            <a class="page-link" th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}}">Anterior</a>
+                                            <span class="page-link" th:unless="${currentPage > 1}">Anterior</span>
+                                        </li>
+                                        -->
+                                        <li th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                            <a class="page-link" th:if="${currentPage != i}" th:href="@{'/page/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">[[${i}]]</a>
+                                            <span class="page-link" th:unless="${i != currentPage}">[[${i}]]</span>
+                                        </li>
+                                        <!--
+                                        <li class="page-item">
+                                            <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">Proxima</a>
+                                            <span class="page-link" th:unless="${currentPage < totalPages}">Proxima</span>
+                                        </li>
+                                        -->
+                                        <li class="page-item">
+                                            <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">Ultima</a>
+                                            <span class="page-link" th:unless="${currentPage < totalPages}">Ultima</span>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                
+                                <!--       
+                                <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${1}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">Primeira</a>
+                                <span th:unless="${currentPage > 1}">Primeira</span>
+                                
+                                &nbsp;&nbsp;
+
+                                <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}}">Anterior</a>
+                                <span th:unless="${currentPage > 1}">Anterior</span>
+                                
+                                &nbsp;&nbsp;
+                                
+                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">[[${i}]]</a>
+                                    <span th:unless="${i != currentPage}">[[${i}]]</span>
+                                    &nbsp;&nbsp;
+                                </span>
+                                
+                                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">Proxima</a>
+                                <span th:unless="${currentPage < totalPages}">Proxima</span>
+
+                                &nbsp;&nbsp;
+
+                                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">Ultima</a>
+                                <span th:unless="${currentPage < totalPages}">Ultima</span>
+                                -->
+                            </div>  
+
                     </div>
                 </div>
             </div>
@@ -195,7 +235,7 @@
                 }
             </script>
             <div class="row">                              
-                <div th:each="produto : ${produtos}" id="produto" class="d-flex align-items-stretch mt-2 col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div th:each="produto : ${listaProdutos}" id="produto" class="d-flex align-items-stretch mt-2 col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                     <div class="card text-center bg-light">
                         <div class="button1" onclick="produtoSelecionado()">                     
                         <img id="imagemProduto" th:src="'../assets/' + ${produto.imagem}" class="card-img-top">
@@ -242,26 +282,8 @@
                               <option value="2">Ordenar pelo menor preco</option>
                               <option value="3">Ordenar pelo maior preço</option>
                             </select>
-                        </form>
-                        <nav class="d-inline-block">
-                            <ul class="pagination pagination-sm my-0">
-                                <li class="page-item">
-                                    <button type="button" class="page-link">1</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">2</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">3</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">4</button>
-                                </li>
-                                <li class="page-item">
-                                    <button type="button" class="page-link">5</button>
-                                </li>
-                            </ul>
-                        </nav>
+                        </form>                      
+
                     </div>
                 </div>
             </div>
