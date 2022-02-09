@@ -13,6 +13,7 @@ Projeto iniciado com o objetivo de colocar o aprendizado sobre a stack de desenv
 ###  **Backend:**
 * #### Java 
 * #### Spring Boot
+* #### JPA
 * #### Lombok
 ### **Banco de Dados:**
 * #### MySql
