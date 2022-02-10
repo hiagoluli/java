@@ -8,7 +8,7 @@ Projeto iniciado com o objetivo de colocar o aprendizado sobre a stack de desenv
 ## **Linguagens, frameworks e tecnologias utilizadas**:
 ###  **Frontend:**
 * #### Html, Css, JavaScript
-* #### Bootstrap
+* #### Bootstrap (responsivo)
 * #### Thymeleaf
 ###  **Backend:**
 * #### Java 
@@ -20,4 +20,6 @@ Projeto iniciado com o objetivo de colocar o aprendizado sobre a stack de desenv
 
 ![Pagina Principal](https://github.com/hiagoluli/java/blob/main/PaginaPrincipal.PNG)
 
-![Cadastro Produto ](https://github.com/hiagoluli/java/blob/main/cadastroProduto.PNG)
+![Cadastro Produto](https://github.com/hiagoluli/java/blob/main/cadastroProduto.PNG)
+
+![Login](https://github.com/hiagoluli/java/blob/main/login.PNG)
