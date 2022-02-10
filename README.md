@@ -10,6 +10,7 @@ Projeto iniciado com o objetivo de colocar o aprendizado sobre a stack de desenv
 * #### Html, Css, JavaScript
 * #### Bootstrap (responsivo)
 * #### Thymeleaf
+* #### JQuery
 ###  **Backend:**
 * #### Java 
 * #### Spring Boot
@@ -22,6 +23,6 @@ Projeto iniciado com o objetivo de colocar o aprendizado sobre a stack de desenv
 
 ![Cadastro Produto](https://github.com/hiagoluli/java/blob/main/cadastroProduto.PNG)
 
-![Login](https://github.com/hiagoluli/java/blob/main/login.PNG)
+![Pagina Principal Mobile](https://github.com/hiagoluli/java/blob/main/PaginaPrincipal_2.PNG) ![Login](https://github.com/hiagoluli/java/blob/main/login.PNG)
 
-![Pagina Principal Mobile](https://github.com/hiagoluli/java/blob/main/PaginaPrincipal_2.PNG)
+
