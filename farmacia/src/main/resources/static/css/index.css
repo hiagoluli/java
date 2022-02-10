@@ -409,6 +409,10 @@
     #redesSociais i {
       padding-left: 15px;
     }
+
+    #cartIcon {
+      margin-right: 40px;
+    }
     
   /*
     #total {

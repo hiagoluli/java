@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.farmacia.farmacia.Dto.LabelValueDTO;
+import com.farmacia.farmacia.Dto.ProdutoDTO;
 import com.farmacia.farmacia.Models.produto;
 import com.farmacia.farmacia.Services.produtoService;
 
@@ -69,7 +71,7 @@ public class produtoController {
 
     @PostMapping("/registrarProduto")
     @ResponseBody
-    public ModelAndView salvarProduto(produto prod){
+    public ModelAndView salvarProduto(@Valid produto prod){
         if(prod.getImagem() == null){
             prod.setImagem("generico.png");
         }  
@@ -77,6 +79,7 @@ public class produtoController {
         ps.salvarProduto(prod);
         return mv;
     }
+
 
     @PostMapping("/excluirProduto")
     @ResponseBody

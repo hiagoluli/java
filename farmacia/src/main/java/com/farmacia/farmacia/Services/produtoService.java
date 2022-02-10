@@ -2,6 +2,7 @@ package com.farmacia.farmacia.Services;
 
 import java.util.List;
 
+import com.farmacia.farmacia.Dto.ProdutoDTO;
 import com.farmacia.farmacia.Models.produto;
 import com.farmacia.farmacia.Repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class produtoService {
         return pr.buscaPorDescricao(keyword);
     }
 
+    @Transactional
     public produto salvarProduto(produto prod){
         return pr.save(prod);
     }
